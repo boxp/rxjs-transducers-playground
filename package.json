@@ -1,5 +1,5 @@
 {
-  "name": "rxjs-webpack-test",
+  "name": "calculator",
   "version": "1.0.0",
   "description": "rxjs & webpack hot-code-loading test",
   "main": "index.js",
@@ -32,6 +32,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "babel-polyfill": "^6.9.1"
+    "babel-polyfill": "^6.9.1",
+    "rx": "^4.1.0"
   }
 }

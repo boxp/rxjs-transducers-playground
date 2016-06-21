@@ -1,16 +1,17 @@
-import Rx from 'rxjs';
+import Rx from 'rx';
+
 function Show(x) {
-	let elm = document.getElementById("app");
+	let elm = document.getElementById("screen");
 
 	elm.innerHTML = x;
 }
 
-function Fact(x) {
-	return Rx.Observable
-		.range(1, x)
-		.reduce((acc, x) => {
-			return acc * x
-		})
+function InputEvent(elm) {
+	return Rx.Observable.fromEvent(elm, 'input')
 }
 
-export { Show, Fact };
+function EventToValue(e) {
+	return e.target.value
+}
+
+export { Show, InputEvent, EventToValue };
