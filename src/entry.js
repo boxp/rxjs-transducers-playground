@@ -1,16 +1,71 @@
 import Rx from 'rx';
-import { Show, InputEvent, EventToValue } from "./util.js";
+const t = require("transducers-js");
 
-let event1 = InputEvent(document.getElementById("txt1"))
-	.map(EventToValue)
-	.map(parseInt);
+function randObs() {
+	return	Rx.Observable.just(Math.random());
+}
 
-let event2 = InputEvent(document.getElementById("txt2"))
-	.map(EventToValue)
-	.map(parseInt);
+let source = [];
+for (var i = 0; i < 1000000; ++i) {
+	source.push(Math.random());
+}
 
-event1
-	.combineLatest(event2, (num1, num2) => {
-		return num1 + num2;
+let sourceObs = Rx.Observable
+	.range(1, 1000000)
+	.selectMany(function(x) { 
+		return randObs()
 	})
-	.subscribe(Show);
+
+function toPercent(x) {
+	return Math.floor(x * 100);
+}
+function isEven(x) {
+	return x % 2 === 0;
+}
+function sum(x, y) {
+	return x + y
+}
+
+let transducer = t.comp(t.map(toPercent), t.filter(isEven));
+
+// Native higher-order function
+console.time("native higher-order function");
+
+source
+	.map(toPercent)
+	.filter(isEven)
+	.reduce(sum)
+
+console.timeEnd("native higher-order function");
+
+// Transducers
+console.time("transducers");
+
+t.transduce(transducer, sum, 0, source);
+
+console.timeEnd("transducers");
+
+// RxJS
+console.time("rxjs");
+
+sourceObs
+	.map(toPercent)
+	.filter(isEven)
+	.reduce(sum)
+	.subscribe(function(x) {
+		// some side effect
+	});
+
+console.timeEnd("rxjs");
+
+// Transducers + RxJS
+console.time("transducers + rxjs");
+
+sourceObs
+	.transduce(transducer)
+	.reduce(sum)
+	.subscribe(function(x) {
+		// some side effect
+	});
+
+console.timeEnd("transducers + rxjs");

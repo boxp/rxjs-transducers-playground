@@ -1,5 +1,5 @@
 {
-  "name": "calculator",
+  "name": "rxjs-transducers-playground",
   "version": "1.0.0",
   "description": "rxjs & webpack hot-code-loading test",
   "main": "index.js",
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "rx": "^4.1.0"
+    "rx": "^4.1.0",
+    "transducers-js": "^0.4.174"
   }
 }
